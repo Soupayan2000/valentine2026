@@ -16,7 +16,7 @@ const CONFIG = {
       secretAnswer: "Secret Answer 😏",
     },
     second: {
-      text: "What does “forever” look like to you right now?",
+      text: "How much do you love me?",
       startText: "Start 💌",
       nextBtn: "Next ➜",
     },
