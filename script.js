@@ -6,18 +6,18 @@ window.addEventListener("DOMContentLoaded", () => {
   const titleEl = document.getElementById("valentineTitle");
   if (titleEl) titleEl.textContent = `${CONFIG.valentineName || "Tiklu"}, my love...`;
 
-  // Step 1
+  // Question 1
   setText("question1Text", CONFIG.questions?.first?.text);
   setText("yesBtn1", CONFIG.questions?.first?.yesBtn);
   setText("noBtn1", CONFIG.questions?.first?.noBtn);
   setText("secretAnswerBtn", CONFIG.questions?.first?.secretAnswer);
 
-  // Step 2 (love meter)
+  // Question 2 (Love meter)
   setText("question2Text", CONFIG.questions?.second?.text);
   setText("startText", CONFIG.questions?.second?.startText);
   setText("nextBtn", CONFIG.questions?.second?.nextBtn);
 
-  // Step 3 (textbox)
+  // Question 3 (Text box)
   setText("question3Text", CONFIG.questions?.third?.text);
   setText("submitForeverBtn", CONFIG.questions?.third?.buttonText);
 
@@ -26,12 +26,12 @@ window.addEventListener("DOMContentLoaded", () => {
     foreverAnswer.placeholder = CONFIG.questions?.third?.placeholder || "Type your answer here...";
   }
 
-  // Step 4 (final)
+  // Question 4 (Final YES/NO)
   setText("question4Text", CONFIG.questions?.fourth?.text);
   setText("yesBtn4", CONFIG.questions?.fourth?.yesBtn);
   setText("noBtn4", CONFIG.questions?.fourth?.noBtn);
 
-  // Button behavior
+  // Button wiring
   const yesBtn1 = document.getElementById("yesBtn1");
   const noBtn1 = document.getElementById("noBtn1");
   const secretBtn = document.getElementById("secretAnswerBtn");
@@ -47,10 +47,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
   if (nextBtn) nextBtn.onclick = () => showStep(3);
 
+  // Step 3 -> Step 4 (we store it but we DO NOT display it later)
   if (submitForeverBtn) {
     submitForeverBtn.onclick = () => {
-      const answer = document.getElementById("foreverAnswer")?.value?.trim() || "";
-      window.foreverAnswer = answer; // store (optional)
+      window.foreverAnswer = document.getElementById("foreverAnswer")?.value?.trim() || "";
       showStep(4);
     };
   }
@@ -139,22 +139,16 @@ function initLoveMeter() {
 }
 
 function celebrate() {
+  // hide questions
   document.getElementById("question1")?.classList.add("hidden");
   document.getElementById("question2")?.classList.add("hidden");
   document.getElementById("question3")?.classList.add("hidden");
   document.getElementById("question4")?.classList.add("hidden");
 
+  // show celebration
   document.getElementById("celebration")?.classList.remove("hidden");
-
   setText("celebrationTitle", CONFIG.celebration?.title || "YAYYY!! 💘");
-
-  // Show typed answer (optional cute touch)
-  const baseMsg = CONFIG.celebration?.message || "You just made my whole heart happy ❤️";
-  const typed = (window.foreverAnswer || "").trim();
-  const msg = typed ? `${baseMsg}\n\nForever to you: “${typed}” 💖` : baseMsg;
-  const cm = document.getElementById("celebrationMessage");
-  if (cm) cm.textContent = msg;
-
+  setText("celebrationMessage", CONFIG.celebration?.message || "You just made my whole heart happy ❤️");
   setText("celebrationEmojis", CONFIG.celebration?.emojis || "💖💘💕❤️🧸✨");
 
   // heart burst
@@ -210,5 +204,3 @@ function setupShareButton() {
     } catch {}
   });
 }
-
-
