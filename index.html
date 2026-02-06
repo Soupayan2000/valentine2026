@@ -1,265 +1,106 @@
 <!doctype html>
 <html lang="en">
-function cfg() {
-  return window.VALENTINE_CONFIG || {};
-}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Will You Be My Valentine? 💝</title>
 
-// Force your name/questions so old values can’t show
-function forceConfig(c) {
-  c.valentineName = "Tiklu";
-  c.pageTitle = c.pageTitle || "Will You Be My Valentine? 💝";
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
 
-  c.questions = c.questions || {};
-  c.questions.first = c.questions.first || {};
-  c.questions.second = c.questions.second || {};
-  c.questions.third = c.questions.third || {};
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-  c.questions.first.text = "Do I still give you butterflies?";
-  c.questions.second.text = "What does “forever” look like to you right now?";
-  c.questions.third.text = "Will you be my valentine?";
+  <body>
+    <!-- Floating Background Elements -->
+    <div class="floating-elements" aria-hidden="true"></div>
 
-  c.questions.first.yesBtn = c.questions.first.yesBtn || "Yes ❤️";
-  c.questions.first.noBtn = c.questions.first.noBtn || "No 🙈";
-  c.questions.first.secretAnswer = c.questions.first.secretAnswer || "Secret Answer 😏";
+    <main class="container">
+      <h1 id="valentineTitle"></h1>
 
-  c.questions.second.startText = c.questions.second.startText || "Start 💌";
-  c.questions.second.nextBtn = c.questions.second.nextBtn || "Next ➜";
+      <!-- Music Player -->
+      <div id="musicControls" class="music-controls">
+        <button id="musicToggle" class="music-btn" type="button">
+          🎵 Play Music
+        </button>
 
-  c.questions.third.yesBtn = c.questions.third.yesBtn || "Yes!! 💘";
-  c.questions.third.noBtn = c.questions.third.noBtn || "No 😭";
+        <audio id="bgMusic" loop>
+          <source id="musicSource" type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+      </div>
 
-  c.floatingEmojis = c.floatingEmojis || { hearts: ["❤️"], bears: ["🧸"] };
-  c.loveMessages = c.loveMessages || {
-    normal: "And beyond! 🥰",
-    high: "To infinity and beyond! 🚀💝",
-    extreme: "WOOOOW You love me that much?? 🥰🚀💝",
-  };
-  c.celebration = c.celebration || {
-    title: "Yay! 💘",
-    message: "You made me so happy ❤️",
-    emojis: "💖💘💕❤️🧸✨",
-  };
-  c.music = c.music || {};
-  c.music.enabled = typeof c.music.enabled === "boolean" ? c.music.enabled : true;
-  c.music.autoplay = typeof c.music.autoplay === "boolean" ? c.music.autoplay : false;
-  c.music.musicUrl = c.music.musicUrl || "dooron-dooron.mp3";
-  c.music.volume = typeof c.music.volume === "number" ? c.music.volume : 0.5;
+      <!-- Question 1 -->
+      <section class="question-section" id="question1">
+        <h2 id="question1Text"></h2>
 
-  return c;
-}
+        <div class="button-group">
+          <button class="cute-btn" id="yesBtn1" type="button"></button>
+          <button class="cute-btn" id="noBtn1" type="button"></button>
+        </div>
 
-window.addEventListener("DOMContentLoaded", () => {
-  const c = forceConfig(cfg());
+        <div class="secret-answer">
+          <button class="cute-btn special" id="secretAnswerBtn" type="button"></button>
+        </div>
+      </section>
 
-  // Title
-  document.title = c.pageTitle;
-  const titleEl = document.getElementById("valentineTitle");
-  if (titleEl) titleEl.textContent = `${c.valentineName}, my love...`;
+      <!-- Question 2 -->
+      <section class="question-section hidden" id="question2">
+        <h2 id="question2Text"></h2>
 
-  // ✅ Correct IDs (match your HTML)
-  const q1 = document.getElementById("question1Text");
-  const q2 = document.getElementById("question2Text");
-  const q3 = document.getElementById("question3Text");
+        <div class="love-meter">
+          <label for="loveMeter" class="sr-only">Love Meter</label>
+          <input
+            type="range"
+            min="0"
+            max="10000"
+            value="100"
+            class="slider"
+            id="loveMeter"
+          />
 
-  if (q1) q1.textContent = c.questions.first.text;
-  if (q2) q2.textContent = c.questions.second.text;
-  if (q3) q3.textContent = c.questions.third.text;
+          <p>
+            <span class="love-value-container">
+              <span id="startText"></span>
+              (<span id="loveValue">100</span>%)
+            </span>
+            <span id="extraLove" class="hidden"></span>
+          </p>
+        </div>
 
-  // Buttons
-  const yesBtn1 = document.getElementById("yesBtn1");
-  const noBtn1 = document.getElementById("noBtn1");
-  const secretAnswerBtn = document.getElementById("secretAnswerBtn");
-  const startText = document.getElementById("startText");
-  const nextBtn = document.getElementById("nextBtn");
-  const yesBtn3 = document.getElementById("yesBtn3");
-  const noBtn3 = document.getElementById("noBtn3");
+        <button class="cute-btn" id="nextBtn" type="button"></button>
+      </section>
 
-  if (yesBtn1) yesBtn1.textContent = c.questions.first.yesBtn;
-  if (noBtn1) noBtn1.textContent = c.questions.first.noBtn;
-  if (secretAnswerBtn) secretAnswerBtn.textContent = c.questions.first.secretAnswer;
+      <!-- Question 3 -->
+      <section class="question-section hidden" id="question3">
+        <h2 id="question3Text"></h2>
 
-  if (startText) startText.textContent = c.questions.second.startText;
-  if (nextBtn) nextBtn.textContent = c.questions.second.nextBtn;
+        <div class="button-group">
+          <button class="cute-btn final-yes" id="yesBtn3" type="button"></button>
+          <button class="cute-btn" id="noBtn3" type="button"></button>
+        </div>
+      </section>
 
-  if (yesBtn3) yesBtn3.textContent = c.questions.third.yesBtn;
-  if (noBtn3) noBtn3.textContent = c.questions.third.noBtn;
+      <!-- Celebration -->
+      <section class="celebration hidden" id="celebration">
+        <h2 id="celebrationTitle"></h2>
+        <p class="celebration-text" id="celebrationMessage"></p>
+        <p class="celebration-text" id="celebrationEmojis"></p>
+      </section>
 
-  // Make buttons behave correctly even if HTML onclick was wrong
-  if (yesBtn1) yesBtn1.onclick = () => showNextQuestion(2);
-  if (noBtn1) noBtn1.onclick = function () { moveButton(this); };
-  if (secretAnswerBtn) secretAnswerBtn.onclick = () => showNextQuestion(2);
-  if (nextBtn) nextBtn.onclick = () => showNextQuestion(3);
-  if (yesBtn3) yesBtn3.onclick = () => celebrate();
-  if (noBtn3) noBtn3.onclick = function () { moveButton(this); };
+      <!-- Share Button -->
+      <div class="share-container">
+        <button id="shareBtn" class="share-btn" type="button">
+          🔗 Share This Page
+        </button>
+      </div>
+    </main>
 
-  createFloatingElements(c);
-  setupMusicPlayer(c);
-  setupShareButton();
-  setInitialPosition();
-});
-
-// Floating elements
-function createFloatingElements(c) {
-  const container = document.querySelector(".floating-elements");
-  if (!container) return;
-
-  (c.floatingEmojis.hearts || []).forEach((heart) => {
-    const div = document.createElement("div");
-    div.className = "heart";
-    div.innerHTML = heart;
-    setRandomPosition(div);
-    container.appendChild(div);
-  });
-
-  (c.floatingEmojis.bears || []).forEach((bear) => {
-    const div = document.createElement("div");
-    div.className = "bear";
-    div.innerHTML = bear;
-    setRandomPosition(div);
-    container.appendChild(div);
-  });
-}
-
-function setRandomPosition(el) {
-  el.style.left = Math.random() * 100 + "vw";
-  el.style.animationDelay = Math.random() * 5 + "s";
-  el.style.animationDuration = 10 + Math.random() * 20 + "s";
-}
-
-// Navigation between questions (works even without appState)
-function showNextQuestion(step) {
-  document.getElementById("question1")?.classList.toggle("hidden", step !== 1);
-  document.getElementById("question2")?.classList.toggle("hidden", step !== 2);
-  document.getElementById("question3")?.classList.toggle("hidden", step !== 3);
-  window.appState?.setState?.({ currentStep: step });
-}
-
-// Move "No" button
-function moveButton(button) {
-  const x = Math.random() * (window.innerWidth - button.offsetWidth);
-  const y = Math.random() * (window.innerHeight - button.offsetHeight);
-  button.style.position = "fixed";
-  button.style.left = x + "px";
-  button.style.top = y + "px";
-}
-
-// Love meter
-function setInitialPosition() {
-  const loveMeter = document.getElementById("loveMeter");
-  const loveValue = document.getElementById("loveValue");
-  if (!loveMeter || !loveValue) return;
-  loveMeter.value = 100;
-  loveValue.textContent = 100;
-  loveMeter.style.width = "100%";
-}
-
-document.addEventListener("input", (e) => {
-  if (e.target?.id !== "loveMeter") return;
-  const c = forceConfig(cfg());
-
-  const loveMeter = document.getElementById("loveMeter");
-  const loveValue = document.getElementById("loveValue");
-  const extraLove = document.getElementById("extraLove");
-  if (!loveMeter || !loveValue || !extraLove) return;
-
-  const value = parseInt(loveMeter.value, 10);
-  loveValue.textContent = value;
-
-  if (value > 100) {
-    extraLove.classList.remove("hidden");
-    const overflowPercentage = (value - 100) / 9900;
-    const extraWidth = overflowPercentage * window.innerWidth * 0.8;
-    loveMeter.style.width = `calc(100% + ${extraWidth}px)`;
-
-    if (value >= 5000) extraLove.textContent = c.loveMessages.extreme;
-    else if (value > 1000) extraLove.textContent = c.loveMessages.high;
-    else extraLove.textContent = c.loveMessages.normal;
-  } else {
-    extraLove.classList.add("hidden");
-    loveMeter.style.width = "100%";
-  }
-});
-
-// Celebration
-function celebrate() {
-  const c = forceConfig(cfg());
-
-  document.getElementById("question1")?.classList.add("hidden");
-  document.getElementById("question2")?.classList.add("hidden");
-  document.getElementById("question3")?.classList.add("hidden");
-  document.getElementById("celebration")?.classList.remove("hidden");
-
-  document.getElementById("celebrationTitle").textContent = c.celebration.title;
-  document.getElementById("celebrationMessage").textContent = c.celebration.message;
-  document.getElementById("celebrationEmojis").textContent = c.celebration.emojis;
-
-  createHeartExplosion(c);
-}
-
-function createHeartExplosion(c) {
-  const container = document.querySelector(".floating-elements");
-  if (!container) return;
-
-  const hearts = c.floatingEmojis.hearts || ["❤️"];
-  for (let i = 0; i < 50; i++) {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
-    container.appendChild(heart);
-    setRandomPosition(heart);
-  }
-}
-
-// Music
-function setupMusicPlayer(c) {
-  const musicControls = document.getElementById("musicControls");
-  const musicToggle = document.getElementById("musicToggle");
-  const bgMusic = document.getElementById("bgMusic");
-  const musicSource = document.getElementById("musicSource");
-
-  if (!musicControls || !musicToggle || !bgMusic || !musicSource) return;
-
-  if (!c.music.enabled) {
-    musicControls.style.display = "none";
-    return;
-  }
-
-  musicSource.src = c.music.musicUrl;
-  bgMusic.volume = c.music.volume ?? 0.5;
-  bgMusic.load();
-
-  const playText = c.music.startText || "🎵 Play Music";
-  const stopText = c.music.stopText || "🔇 Stop Music";
-  musicToggle.textContent = playText;
-
-  if (c.music.autoplay) {
-    bgMusic.play().catch(() => {});
-  }
-
-  musicToggle.addEventListener("click", () => {
-    if (bgMusic.paused) {
-      bgMusic.play();
-      musicToggle.textContent = stopText;
-    } else {
-      bgMusic.pause();
-      musicToggle.textContent = playText;
-    }
-  });
-}
-
-// Share button
-function setupShareButton() {
-  const shareBtn = document.getElementById("shareBtn");
-  if (!shareBtn) return;
-
-  shareBtn.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      const t = shareBtn.textContent;
-      shareBtn.textContent = "Link Copied! ❤️";
-      setTimeout(() => (shareBtn.textContent = t), 1500);
-    } catch {}
-  });
-}
+    <!-- Only load YOUR scripts to avoid old code overriding -->
+    <script src="script.js?v=1"></script>
+  </body>
+</html>
 
 
