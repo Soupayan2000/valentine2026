@@ -1,4 +1,3 @@
-// ✅ CONFIG (editable)
 window.VALENTINE_CONFIG = {
   pageTitle: "Will You Be My Valentine? 💝",
   valentineName: "Tiklu",
@@ -15,16 +14,21 @@ window.VALENTINE_CONFIG = {
       noBtn: "No 🙈",
       secretAnswer: "Secret Answer 😏",
     },
+
     second: {
       text: "How much do you love me?",
       startText: "Start 💌",
       nextBtn: "Next ➜",
     },
+
+    // ✅ This is the ONLY question with a text box
     third: {
       text: "What does “forever” look like to you right now?",
       placeholder: "Type your answer here...",
       buttonText: "Next ➜",
     },
+
+    // ✅ Final question stays YES/NO (no text box)
     fourth: {
       text: "Will you be my valentine?",
       yesBtn: "Yes!! 💘",
@@ -53,4 +57,3 @@ window.VALENTINE_CONFIG = {
     volume: 0.5,
   },
 };
-
