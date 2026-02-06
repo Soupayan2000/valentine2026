@@ -42,7 +42,7 @@ const CONFIG = {
   music: {
     enabled: true,
     autoplay: false, // autoplay often blocked—button works
-    musicUrl: "dooron-dooron.mp3", // put in same folder as index.html
+    musicUrl: "dooron_dooron.mp3", // put in same folder as index.html
     startText: "🎵 Play Music",
     stopText: "🔇 Stop Music",
     volume: 0.5,
