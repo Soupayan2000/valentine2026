@@ -47,9 +47,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   if (nextBtn) nextBtn.onclick = () => showStep(3);
 
-  // Step 3 -> Step 4 (we store it but we DO NOT display it later)
   if (submitForeverBtn) {
     submitForeverBtn.onclick = () => {
+      // Store it (optional). We are NOT displaying it anywhere.
       window.foreverAnswer = document.getElementById("foreverAnswer")?.value?.trim() || "";
       showStep(4);
     };
@@ -58,7 +58,7 @@ window.addEventListener("DOMContentLoaded", () => {
   if (yesBtn4) yesBtn4.onclick = () => celebrate();
   if (noBtn4) noBtn4.onclick = () => moveButton(noBtn4);
 
-  // Floating emojis
+  // Floating background
   createFloatingElements();
 
   // Love meter
@@ -95,11 +95,14 @@ function createFloatingElements() {
   const container = document.querySelector(".floating-elements");
   if (!container) return;
 
+  // emojis
   const hearts = CONFIG.floatingEmojis?.hearts || ["❤️"];
   const bears = CONFIG.floatingEmojis?.bears || ["🧸"];
-
   hearts.forEach((h) => addFloat(container, "heart", h));
   bears.forEach((b) => addFloat(container, "bear", b));
+
+  // ✅ floating photos
+  (CONFIG.floatingImages || []).forEach((src) => addFloatingImage(container, src));
 }
 
 function addFloat(container, className, emoji) {
@@ -110,6 +113,19 @@ function addFloat(container, className, emoji) {
   div.style.animationDelay = Math.random() * 5 + "s";
   div.style.animationDuration = 10 + Math.random() * 20 + "s";
   container.appendChild(div);
+}
+
+function addFloatingImage(container, src) {
+  const img = document.createElement("img");
+  img.src = src;
+  img.className = "floating-image";
+  img.alt = "Memory";
+
+  img.style.left = Math.random() * 90 + "vw";
+  img.style.animationDelay = Math.random() * 6 + "s";
+  img.style.animationDuration = 16 + Math.random() * 18 + "s";
+
+  container.appendChild(img);
 }
 
 function initLoveMeter() {
@@ -139,19 +155,17 @@ function initLoveMeter() {
 }
 
 function celebrate() {
-  // hide questions
   document.getElementById("question1")?.classList.add("hidden");
   document.getElementById("question2")?.classList.add("hidden");
   document.getElementById("question3")?.classList.add("hidden");
   document.getElementById("question4")?.classList.add("hidden");
 
-  // show celebration
   document.getElementById("celebration")?.classList.remove("hidden");
+
   setText("celebrationTitle", CONFIG.celebration?.title || "YAYYY!! 💘");
   setText("celebrationMessage", CONFIG.celebration?.message || "You just made my whole heart happy ❤️");
   setText("celebrationEmojis", CONFIG.celebration?.emojis || "💖💘💕❤️🧸✨");
 
-  // heart burst
   const container = document.querySelector(".floating-elements");
   if (!container) return;
   for (let i = 0; i < 40; i++) addFloat(container, "heart", "💖");
@@ -175,10 +189,6 @@ function setupMusicPlayer() {
   audio.load();
 
   toggle.textContent = CONFIG.music.startText || "🎵 Play Music";
-
-  if (CONFIG.music.autoplay) {
-    audio.play().catch(() => {});
-  }
 
   toggle.addEventListener("click", () => {
     if (audio.paused) {
